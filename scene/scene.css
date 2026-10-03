@@ -1,0 +1,49 @@
+/* Chat Says landing: fake "Just Chatting" webcam scene.
+   Everything is scoped under .sc-scene. The art is one SVG on a 1600x900 grid,
+   so it scales with the parent (.stream, 16:9, container-type:inline-size). */
+.sc-scene{position:absolute;inset:0;overflow:hidden;contain:paint;
+  background:
+    /* night sky behind the window glass (glass box: 248,78 354x374 on the 1600 grid) */
+    linear-gradient(#1c2140,#3b3760 45%,#8a5670 75%,#e2956a) 15.5cqw 4.875cqw/22.125cqw 23.375cqw no-repeat,
+    /* desk-lamp light on the wall */
+    radial-gradient(ellipse 18.75% 18.9% at 29.4% 67.8%,rgba(255,213,154,.5),rgba(255,184,112,.14) 50%,transparent),
+    radial-gradient(ellipse 26.25% 36.7% at 26.9% 62.2%,rgba(255,213,154,.5),rgba(255,184,112,.14) 50%,transparent),
+    /* faint wallpaper stripes */
+    repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 .125cqw,transparent .125cqw 2.125cqw),
+    /* the wall */
+    radial-gradient(ellipse 70% 70% at 46% 44%,#8f6762,#6e4b4d 45%,#3c2a2f)}
+.sc-scene .sc-art{position:absolute;inset:0;display:block;width:100%;height:100%}
+.sc-scene .sc-glows,.sc-scene .sc-light,.sc-scene .sc-grain,.sc-scene .sc-vignette{position:absolute;inset:0;pointer-events:none}
+.sc-scene .sc-glows i{position:absolute;width:3.4cqw;height:3.4cqw;margin:-1.7cqw 0 0 -1.7cqw;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,216,144,.75),rgba(255,216,144,0))}
+/* string lights: steady glow; only three bulbs (.tw) twinkle, slowly */
+.sc-scene .sc-glows i.tw{animation:sc-twinkle 7s ease-in-out infinite alternate}
+/* warm pool of lamp light on the desk */
+.sc-scene .sc-light{background:radial-gradient(ellipse 20% 10% at 32.5% 85.6%,rgba(255,213,154,.42),rgba(255,184,112,.12) 50%,transparent);mix-blend-mode:screen}
+.sc-scene .sc-grain{opacity:.14;mix-blend-mode:multiply;background-size:14cqw;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .07 0 0 0 0 .05 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.sc-scene .sc-vignette{
+  background:radial-gradient(ellipse 75% 70% at 50% 42%,transparent 55%,rgba(24,14,14,.45) 100%),
+             linear-gradient(180deg,rgba(255,190,120,.05),rgba(60,20,30,.12))}
+
+/* ---- idle life: four slow loops (city windows stay still) ---- */
+.sc-scene .sc-upper{animation:sc-breathe 5.6s ease-in-out infinite}
+.sc-scene .sc-eye{transform-box:fill-box;transform-origin:center;animation:sc-blink 6.4s infinite}
+.sc-scene .sc-tail{transform-box:view-box;transform-origin:1436px 760px;animation:sc-tail 7s ease-in-out infinite}
+.sc-scene .sc-steam{opacity:.4;animation:sc-steam 4.8s ease-in-out infinite}
+.sc-scene .sc-steam2{animation-delay:-2.4s}
+
+@keyframes sc-breathe{50%{transform:translateY(-3px)}}
+@keyframes sc-blink{0%,93%,100%{transform:scaleY(1)}95.5%{transform:scaleY(.1)}}
+@keyframes sc-tail{0%,100%{transform:rotate(0)}40%{transform:rotate(-7deg)}55%{transform:rotate(-4deg)}70%{transform:rotate(-8deg)}}
+@keyframes sc-steam{0%{opacity:0;transform:translateY(10px)}40%{opacity:.5}100%{opacity:0;transform:translateY(-22px)}}
+@keyframes sc-twinkle{from{opacity:1}to{opacity:.45}}
+
+.sc-scene.sc-paused *,.sc-paused .sc-scene *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.sc-scene *{animation:none!important}}
+
+/* ---- trouble state: the mic cable fell out, streamer keeps talking ---- */
+.sc-scene .sc-unplugged,.sc-scene .sc-mute,.sc-scene .sc-led-bad{opacity:0}
+.sc-scene.is-trouble .sc-unplugged,.sc-scene.is-trouble .sc-mute,.sc-scene.is-trouble .sc-led-bad{opacity:1}
+.sc-scene.is-trouble .sc-plugged,.sc-scene.is-trouble .sc-led-ok{opacity:0}
+.sc-scene .sc-mute,.sc-scene .sc-unplugged,.sc-scene .sc-plugged{transition:opacity .3s}
